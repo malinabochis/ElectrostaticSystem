@@ -13,6 +13,7 @@ private:
     int length;
     int capacity;
     void resize();
+
 public:
     ElectrostaticSystem();
     ElectrostaticSystem(const ElectrostaticSystem& source);
