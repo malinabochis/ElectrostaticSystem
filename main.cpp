@@ -1,3 +1,3 @@
-//
-// Created by Asus on 02-May-26.
-//
+int main(){
+    return 0;
+}

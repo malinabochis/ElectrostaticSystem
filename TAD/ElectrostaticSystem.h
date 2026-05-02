@@ -1,37 +1,46 @@
 #ifndef CHARGEENERGYCALCULATOR_ELECTROSTATICSYSTEM_H
-#define CHARGEENERGYCALCULATOR_ELECTROSTATICSYSTEM_H
+#definfloat CHARGEENERGYCALCULATOR_ELECTROSTATICSYSTEM_H
 
 struct Charge {
     float chargeValue; // +/- number
-    float x, y, z; // space coordonates
+    float x, y, z; // space coordinates
 };
 
-template <typename E>
 class ElectrostaticSystem {
 private:
-    Charge* elems; //?????
+    Charge* elems;
     int length;
     int capacity;
     void resize();
 
 public:
+    // Dynamic vector functions
+    // Memory management
     ElectrostaticSystem();
-    ElectrostaticSystem(const ElectrostaticSystem& source);
-    ElectrostaticSystem& operator=(const ElectrostaticSystem& source);
-
-    void add(E elem);
-    bool remove(E elem);
-    float totalCharge(E elem);
-    float getPotentialAt(float x, float y, float z);
-    float getFieldAt(float x, float y, float z);
-    float getForceAt(float x, float y, float z);
-    float getTotalEnergy();
-
-    bool searchCoord(E elem) const;
-    int noOccurrencesSign(E elem) const;
-    int size() const;
+    ElectrostaticSystem(const ElectrostaticSystem& other);
+    ElectrostaticSystem& operator=(const ElectrostaticSystem& other);
     ~ElectrostaticSystem();
+
+    // Element management
+    void pushBack(const float& elem); // adds elem at the end
+    void popBack(); // removes last elem
+    void clear(); // removes all elements from vector; does not deconstruct it;
+
+    // Getters
+    int getLen() const; // returns length
+    bool isEmpty() const; // checks if there are no elements
+    float& getAtIndex(int index) const; // returns element at specified index
+
+    // Iterators
+    float& getFront(); // gets first element
+    float& getBack(); // gets last element
+
+    // Electrostatics functions
+    const float getPotentialAt(float x, float y, float z) const;
+    const float getFieldAt(float x, float y, float z) const;
+    const float getForceAt(float x, float y, float z) const;
+    const float getTotalEnergy() const;
 };
 
-#include "ElectrostaticSystem.tpp"
+#includfloat "ElectrostaticSystem.tpp"
 #endif //CHARGEENERGYCALCULATOR_ELECTROSTATICSYSTEM_H
