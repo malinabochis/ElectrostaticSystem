@@ -3,7 +3,6 @@
 
 // head → [Node1] → [Node2] → [Node3] → nullptr
 
-
 struct Charge {
     float chargeValue;
     float x, y, z;
@@ -43,9 +42,9 @@ public:
     // Access
     int getLen() const;
     bool isEmpty() const;
-    Charge& getAtIndex(int index) const; // ?? public
-    Charge &getFront() const; // ?? do we rlly need it
-    Charge &getBack() const; // ?? do we rlly need it
+    Charge& getAtIndex(int index) const;
+    Charge &getFront() const;
+    Charge &getBack() const;
 
     // Search
     Charge* findChargeAt(float x, float y, float z) const;
