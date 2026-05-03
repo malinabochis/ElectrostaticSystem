@@ -178,12 +178,14 @@ inline Charge* ElectrostaticSystem::findChargeAt(const float x, const float y, c
 
 // =============Electrostatics functions=============
 
+// getPotentialAt
+
 inline float ElectrostaticSystem::getPotentialAt(const float x, const float y, const float z) const {
     float V = 0;
 
     const Node* crt = head;
     while (crt != nullptr) {
-        constexpr float k = 8.9875517923e9f;
+        constexpr float k = 8.9875517923e9f; // = 1 / (4 * pi * eps_0)
         const float dx = x - crt->elem.x;
         const float dy = y - crt->elem.y;
         const float dz = z - crt->elem.z;
@@ -197,6 +199,8 @@ inline float ElectrostaticSystem::getPotentialAt(const float x, const float y, c
 
     return V;
 }
+
+// getFieldAt
 
 inline float ElectrostaticSystem::getFieldAt(const float x, const float y, const float z) const {
     float E = 0;
@@ -218,12 +222,21 @@ inline float ElectrostaticSystem::getFieldAt(const float x, const float y, const
     return E;
 }
 
+// getForceAt
+
 inline float ElectrostaticSystem::getForceAt(const float x, const float y, const float z) const {
-    // Forța necesită o sarcină test q_test.
-    // Dacă nu ai q_test, poți considera q_test = 1C.
-    constexpr float q_test = 1.0f;
+    // Force needs a test charge
+    constexpr float q_test = 1.0f; // without the test charge specified, consider test charge to be 1C [SI UNITS]
     return q_test * getFieldAt(x, y, z);
 }
+
+// getForceOn
+
+inline float ElectrostaticSystem::getForceOn(const Charge c) const{
+    return c.chargeValue * getFieldAt(c.x, c.y, c.z);
+}
+
+// getTotalEnergy
 
 inline float ElectrostaticSystem::getTotalEnergy() const {
     float U = 0;

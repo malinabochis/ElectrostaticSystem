@@ -54,6 +54,7 @@ public:
     float getPotentialAt(float x, float y, float z) const;
     float getFieldAt(float x, float y, float z) const;
     float getForceAt(float x, float y, float z) const;
+    float getForceOn(Charge c) const;
     float getTotalEnergy() const;
 };
 
