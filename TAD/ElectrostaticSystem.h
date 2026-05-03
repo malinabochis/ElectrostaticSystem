@@ -1,6 +1,9 @@
 #ifndef CHARGEENERGYCALCULATOR_ELECTROSTATICSYSTEM_H
 #define CHARGEENERGYCALCULATOR_ELECTROSTATICSYSTEM_H
 
+// head → [Node1] → [Node2] → [Node3] → nullptr
+
+
 struct Charge {
     float chargeValue;
     float x, y, z;
@@ -8,19 +11,23 @@ struct Charge {
 
 class ElectrostaticSystem {
 private:
-    struct Node {
-        Charge elem;
-        Node* next;
+    // everything in the private part is the definition of a list of nodes
 
-        Node(const Charge& c, Node* next = nullptr)
-            : elem(c), next(next) {}
+    struct Node { // node is a container for the element Charge
+        Charge elem; // each node contains only one charge particle
+        Node* next;  // and a pointer to the next one in line
+
+        Node(const Charge& c, Node* next = nullptr) // used when creating a new node: Node* n = new Node(c, head) meaning creating a new node with charge c having as next neighbor the head (or nullptr if it's the only one in the list)
+            : elem(c), next(next) {} // the implementation being here, there is no need for a constructor without parameters, bcs we do not want to be able to create a node without having already a charge to put in it
     };
 
-    Node* head;
+    // creation of new node:
+    Node* head; // pointer to the first node: head
     int length;
 
-    void copyFrom(const ElectrostaticSystem& other);
-    void clearList();
+    // functions for copy and annihilation of nodes:
+    void copyFrom(const ElectrostaticSystem& source); // deep copy of entire list of nodes (creates new nodes identical to source nodes)
+    void clearList(); // deletes every node so that we need not delete them manually (to avoid memory leak)
 
 public:
     ElectrostaticSystem();
@@ -28,20 +35,22 @@ public:
     ElectrostaticSystem& operator=(const ElectrostaticSystem& source);
     ~ElectrostaticSystem();
 
-    // Inserare / ștergere
+    // Basic operations
     void addCharge(const Charge& c);
     bool removeChargeAt(float x, float y, float z);
     void clear();
 
-    // Acces
+    // Access
     int getLen() const;
     bool isEmpty() const;
     Charge& getAtIndex(int index) const;
 
-    // Căutare
+    // Search
     Charge* findChargeAt(float x, float y, float z) const;
 
-    // Electrostatică
+    Charge &getFront();
+
+    // Electrostatics
     float getPotentialAt(float x, float y, float z) const;
     float getFieldAt(float x, float y, float z) const;
     float getForceAt(float x, float y, float z) const;

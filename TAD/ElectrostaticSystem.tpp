@@ -1,20 +1,55 @@
 #pragma once
 #include "ElectrostaticSystem.h"
 #include <cmath>
+#include <stdexcept>
 
-// =======================
-// Constructori / destructor
-// =======================
+// =============Internal functions=============
 
-ElectrostaticSystem::ElectrostaticSystem()
+inline void ElectrostaticSystem::copyFrom(const ElectrostaticSystem& source) {
+    if (source.head == nullptr) {
+        head = nullptr;
+        length = 0;
+        return;
+    }
+
+    const Node* crtSource = source.head; // current node from source list
+    head = new Node(crtSource->elem); // creating first node of the new list
+    Node* crt = head; // current node from the new list
+    crtSource = crtSource->next; // going to the next node from the source list
+
+    while (crtSource != nullptr) {
+        crt->next = new Node(crtSource->elem);
+        crt = crt->next;
+        crtSource = crtSource->next;
+    }
+
+    length = source.length;
+}
+
+inline void ElectrostaticSystem::clearList() {
+    while (head != nullptr) {
+        const Node* temp = head;
+        head = head->next;
+        delete temp;
+    }
+    length = 0; // at the end, head will be nullptr
+}
+
+// =============Public functions=============
+
+// Constructor
+
+inline ElectrostaticSystem::ElectrostaticSystem()
         : head(nullptr), length(0) {}
 
-ElectrostaticSystem::ElectrostaticSystem(const ElectrostaticSystem& source)
+// Copy constructor
+
+inline ElectrostaticSystem::ElectrostaticSystem(const ElectrostaticSystem& source)
         : head(nullptr), length(0) {
     copyFrom(source);
 }
 
-ElectrostaticSystem& ElectrostaticSystem::operator=(const ElectrostaticSystem& source) {
+inline ElectrostaticSystem& ElectrostaticSystem::operator=(const ElectrostaticSystem& source) {
     if (this != &source) {
         clearList();
         copyFrom(source);
@@ -22,54 +57,24 @@ ElectrostaticSystem& ElectrostaticSystem::operator=(const ElectrostaticSystem& s
     return *this;
 }
 
-ElectrostaticSystem::~ElectrostaticSystem() {
+// Destructor
+
+inline ElectrostaticSystem::~ElectrostaticSystem() {
     clearList();
 }
 
-// =======================
-// Funcții interne
-// =======================
 
-void ElectrostaticSystem::copyFrom(const ElectrostaticSystem& other) {
-    if (other.head == nullptr) {
-        head = nullptr;
-        length = 0;
-        return;
-    }
-
-    Node* crtOther = other.head;
-    head = new Node(crtOther->elem);
-    Node* crt = head;
-    crtOther = crtOther->next;
-
-    while (crtOther != nullptr) {
-        crt->next = new Node(crtOther->elem);
-        crt = crt->next;
-        crtOther = crtOther->next;
-    }
-
-    length = other.length;
-}
-
-void ElectrostaticSystem::clearList() {
-    while (head != nullptr) {
-        Node* temp = head;
-        head = head->next;
-        delete temp;
-    }
-    length = 0;
-}
 
 // =======================
 // Inserare / ștergere
 // =======================
 
-void ElectrostaticSystem::addCharge(const Charge& c) {
+inline void ElectrostaticSystem::addCharge(const Charge& c) {
     head = new Node(c, head);
     length++;
 }
 
-bool ElectrostaticSystem::removeChargeAt(float x, float y, float z) {
+inline bool ElectrostaticSystem::removeChargeAt(float x, float y, float z) {
     if (head == nullptr) return false;
 
     // ștergere la început
@@ -100,7 +105,7 @@ bool ElectrostaticSystem::removeChargeAt(float x, float y, float z) {
     return false;
 }
 
-void ElectrostaticSystem::clear() {
+inline void ElectrostaticSystem::clear() {
     clearList();
 }
 
@@ -108,15 +113,15 @@ void ElectrostaticSystem::clear() {
 // Acces
 // =======================
 
-int ElectrostaticSystem::getLen() const {
+inline int ElectrostaticSystem::getLen() const {
     return length;
 }
 
-bool ElectrostaticSystem::isEmpty() const {
+inline bool ElectrostaticSystem::isEmpty() const {
     return length == 0;
 }
 
-Charge& ElectrostaticSystem::getAtIndex(int index) const {
+inline Charge& ElectrostaticSystem::getAtIndex(int index) const {
     if (index < 0 || index >= length)
         throw std::out_of_range("Index invalid");
 
@@ -127,7 +132,7 @@ Charge& ElectrostaticSystem::getAtIndex(int index) const {
     return crt->elem;
 }
 
-Charge* ElectrostaticSystem::findChargeAt(float x, float y, float z) const {
+inline Charge* ElectrostaticSystem::findChargeAt(float x, float y, float z) const {
     Node* crt = head;
     while (crt != nullptr) {
         if (crt->elem.x == x && crt->elem.y == y && crt->elem.z == z)
@@ -137,7 +142,7 @@ Charge* ElectrostaticSystem::findChargeAt(float x, float y, float z) const {
     return nullptr;
 }
 
-Charge& ElectrostaticSystem::getFront() {
+inline Charge& ElectrostaticSystem::getFront() {
     if (head == nullptr)
         throw std::out_of_range("Lista este goala");
     return head->elem;
