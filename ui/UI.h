@@ -5,13 +5,13 @@
 class UI {
 private:
     ElectrostaticSystem system;
-    void menu() const;
+    static void menu() ;
     void addChargeUI();
     void removeChargeAtUI();
     void clearSystemUI();
 
     void printCharges() const;
-    void printCharge(const Charge& c) const;
+    static void printCharge(const Charge& c) ;
 
     void findChargeAtUI() const;
     void getPotentialAtUI() const;

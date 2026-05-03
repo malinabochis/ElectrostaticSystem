@@ -2,7 +2,7 @@
 #include "ui/UI.h"
 
 int main(){
-    UI ui = UI();
+    auto ui = UI();
     // ui.preloadSystem();
     ui.run();
 }

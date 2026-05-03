@@ -6,7 +6,7 @@ UI::UI() {
     system = ElectrostaticSystem();
 }
 
-void UI::menu() const {
+void UI::menu() {
     std::cout << R"(
 ____________________________________________________________________
     1: Print all charges in the system
@@ -42,7 +42,7 @@ ____________________________________________________________________
 }
 
 
-void UI::printCharge(const Charge& c) const {
+void UI::printCharge(const Charge& c) {
     std::cout << "Charge: " << c.chargeValue << " Coulomb | "
               << "Position: (" << c.x << ", " << c.y << ", " << c.z << ")"
               << std::endl;
