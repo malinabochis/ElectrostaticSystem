@@ -243,7 +243,7 @@ inline float ElectrostaticSystem::getTotalEnergy() const {
 
     const Node* i = head;
     while (i != nullptr) {
-        Node* j = i->next;
+        const Node* j = i->next;
         while (j != nullptr) {
             constexpr float k = 8.9875517923e9f;
             const float dx = i->elem.x - j->elem.x;
