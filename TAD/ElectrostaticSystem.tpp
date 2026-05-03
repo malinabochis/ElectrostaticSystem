@@ -35,7 +35,7 @@ inline void ElectrostaticSystem::clearList() {
     length = 0; // at the end, head will be nullptr
 }
 
-// =============Public functions=============
+// =============Public standard functions=============
 
 // Constructor
 
@@ -49,8 +49,10 @@ inline ElectrostaticSystem::ElectrostaticSystem(const ElectrostaticSystem& sourc
     copyFrom(source);
 }
 
+// Operator =
+
 inline ElectrostaticSystem& ElectrostaticSystem::operator=(const ElectrostaticSystem& source) {
-    if (this != &source) {
+    if (this != &source) { // if this and source are not the exact same object at the same memory address
         clearList();
         copyFrom(source);
     }
@@ -64,54 +66,54 @@ inline ElectrostaticSystem::~ElectrostaticSystem() {
 }
 
 
+// Basic operations
 
-// =======================
-// Inserare / ștergere
-// =======================
+// add
 
 inline void ElectrostaticSystem::addCharge(const Charge& c) {
-    head = new Node(c, head);
+    head = new Node(c, head); // next = head (pointer to the first existing node) --> the next node at which the new node points is the first node of the old list (meaning the new node is now the first in list)
     length++;
 }
 
-inline bool ElectrostaticSystem::removeChargeAt(float x, float y, float z) {
+// remove
+
+inline bool ElectrostaticSystem::removeChargeAt(const float x, const float y, const float z) {
     if (head == nullptr) return false;
 
-    // ștergere la început
     if (head->elem.x == x && head->elem.y == y && head->elem.z == z) {
-        Node* temp = head;
+        const Node* temp = head;
         head = head->next;
         delete temp;
         length--;
         return true;
     }
 
-    // căutare în interior
     Node* crt = head;
     while (crt->next != nullptr) {
-        if (crt->next->elem.x == x &&
+        if (crt->next->elem.x == x && // if the next node is the one to be removed
             crt->next->elem.y == y &&
             crt->next->elem.z == z) {
 
-            Node* temp = crt->next;
-            crt->next = temp->next;
+            const Node* temp = crt->next;
+            crt->next = temp->next; // the "next" pointer points to the node after the one to be removed so that the one to be removed is now not linked to the stack and can be easily deleted
             delete temp;
             length--;
             return true;
         }
-        crt = crt->next;
+        crt = crt->next; // onto the next one in list
     }
 
     return false;
 }
 
+// clear
+
 inline void ElectrostaticSystem::clear() {
     clearList();
 }
 
-// =======================
-// Acces
-// =======================
+
+// Access
 
 inline int ElectrostaticSystem::getLen() const {
     return length;
