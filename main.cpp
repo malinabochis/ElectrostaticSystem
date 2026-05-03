@@ -1,3 +1,8 @@
+#include "TAD/ElectrostaticSystem.h"
+#include "ui/UI.h"
+
 int main(){
-    return 0;
+    UI ui = UI();
+    // ui.preloadSystem();
+    ui.run();
 }

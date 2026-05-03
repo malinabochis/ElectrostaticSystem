@@ -1,11 +1,10 @@
-#pragma once
 #include "ElectrostaticSystem.h"
 #include <cmath>
 #include <stdexcept>
 
 // =============Internal functions=============
 
-inline void ElectrostaticSystem::copyFrom(const ElectrostaticSystem& source) {
+void ElectrostaticSystem::copyFrom(const ElectrostaticSystem& source) {
     if (source.head == nullptr) {
         head = nullptr;
         length = 0;
@@ -26,7 +25,7 @@ inline void ElectrostaticSystem::copyFrom(const ElectrostaticSystem& source) {
     length = source.length;
 }
 
-inline void ElectrostaticSystem::clearList() {
+void ElectrostaticSystem::clearList() {
     while (head != nullptr) {
         const Node* temp = head;
         head = head->next;
@@ -39,19 +38,19 @@ inline void ElectrostaticSystem::clearList() {
 
 // Constructor
 
-inline ElectrostaticSystem::ElectrostaticSystem()
+ElectrostaticSystem::ElectrostaticSystem()
         : head(nullptr), length(0) {}
 
 // Copy constructor
 
-inline ElectrostaticSystem::ElectrostaticSystem(const ElectrostaticSystem& source)
+ElectrostaticSystem::ElectrostaticSystem(const ElectrostaticSystem& source)
         : head(nullptr), length(0) {
     copyFrom(source);
 }
 
 // Operator =
 
-inline ElectrostaticSystem& ElectrostaticSystem::operator=(const ElectrostaticSystem& source) {
+ElectrostaticSystem& ElectrostaticSystem::operator=(const ElectrostaticSystem& source) {
     if (this != &source) { // if this and source are not the exact same object at the same memory address
         clearList();
         copyFrom(source);
@@ -61,7 +60,7 @@ inline ElectrostaticSystem& ElectrostaticSystem::operator=(const ElectrostaticSy
 
 // Destructor
 
-inline ElectrostaticSystem::~ElectrostaticSystem() {
+ElectrostaticSystem::~ElectrostaticSystem() {
     clearList();
 }
 
@@ -70,14 +69,14 @@ inline ElectrostaticSystem::~ElectrostaticSystem() {
 
 // add
 
-inline void ElectrostaticSystem::addCharge(const Charge& c) {
+void ElectrostaticSystem::addCharge(const Charge& c) {
     head = new Node(c, head); // next = head (pointer to the first existing node) --> the next node at which the new node points is the first node of the old list (meaning the new node is now the first in list)
     length++;
 }
 
 // remove
 
-inline bool ElectrostaticSystem::removeChargeAt(const float x, const float y, const float z) {
+bool ElectrostaticSystem::removeChargeAt(const float x, const float y, const float z) {
     if (head == nullptr) return false;
 
     if (head->elem.x == x && head->elem.y == y && head->elem.z == z) {
@@ -108,7 +107,7 @@ inline bool ElectrostaticSystem::removeChargeAt(const float x, const float y, co
 
 // clear
 
-inline void ElectrostaticSystem::clear() {
+void ElectrostaticSystem::clear() {
     clearList();
 }
 
@@ -117,19 +116,19 @@ inline void ElectrostaticSystem::clear() {
 
 // getLen
 
-inline int ElectrostaticSystem::getLen() const {
+int ElectrostaticSystem::getLen() const {
     return length;
 }
 
 // isEmpty
 
-inline bool ElectrostaticSystem::isEmpty() const {
+bool ElectrostaticSystem::isEmpty() const {
     return length == 0;
 }
 
 // getAtIndex
 
-inline Charge& ElectrostaticSystem::getAtIndex(const int index) const {
+Charge& ElectrostaticSystem::getAtIndex(const int index) const {
     if (index < 0 || index >= length)
         throw std::out_of_range("Index invalid");
 
@@ -142,7 +141,7 @@ inline Charge& ElectrostaticSystem::getAtIndex(const int index) const {
 
 // getFront
 
-inline Charge& ElectrostaticSystem::getFront() const {
+Charge& ElectrostaticSystem::getFront() const {
     if (head == nullptr)
         throw std::out_of_range("List is empty");
     return head->elem;
@@ -150,7 +149,7 @@ inline Charge& ElectrostaticSystem::getFront() const {
 
 // getBack
 
-inline Charge& ElectrostaticSystem::getBack() const {
+Charge& ElectrostaticSystem::getBack() const {
     if (head == nullptr)
         throw std::out_of_range("List is empty");
 
@@ -165,7 +164,7 @@ inline Charge& ElectrostaticSystem::getBack() const {
 
 // findChargeAt
 
-inline Charge* ElectrostaticSystem::findChargeAt(const float x, const float y, const float z) const {
+Charge* ElectrostaticSystem::findChargeAt(const float x, const float y, const float z) const {
     Node* crt = head;
     while (crt != nullptr) {
         if (crt->elem.x == x && crt->elem.y == y && crt->elem.z == z)
@@ -180,7 +179,7 @@ inline Charge* ElectrostaticSystem::findChargeAt(const float x, const float y, c
 
 // getPotentialAt
 
-inline float ElectrostaticSystem::getPotentialAt(const float x, const float y, const float z) const {
+float ElectrostaticSystem::getPotentialAt(const float x, const float y, const float z) const {
     float V = 0;
 
     const Node* crt = head;
@@ -202,7 +201,7 @@ inline float ElectrostaticSystem::getPotentialAt(const float x, const float y, c
 
 // getFieldAt
 
-inline float ElectrostaticSystem::getFieldAt(const float x, const float y, const float z) const {
+float ElectrostaticSystem::getFieldAt(const float x, const float y, const float z) const {
     float E = 0;
 
     const Node* crt = head;
@@ -224,7 +223,7 @@ inline float ElectrostaticSystem::getFieldAt(const float x, const float y, const
 
 // getForceAt
 
-inline float ElectrostaticSystem::getForceAt(const float x, const float y, const float z) const {
+float ElectrostaticSystem::getForceAt(const float x, const float y, const float z) const {
     // Force needs a test charge
     constexpr float q_test = 1.0f; // without the test charge specified, consider test charge to be 1C [SI UNITS]
     return q_test * getFieldAt(x, y, z);
@@ -232,13 +231,13 @@ inline float ElectrostaticSystem::getForceAt(const float x, const float y, const
 
 // getForceOn
 
-inline float ElectrostaticSystem::getForceOn(const Charge c) const{
+float ElectrostaticSystem::getForceOn(const Charge c) const{
     return c.chargeValue * getFieldAt(c.x, c.y, c.z);
 }
 
 // getTotalEnergy
 
-inline float ElectrostaticSystem::getTotalEnergy() const {
+float ElectrostaticSystem::getTotalEnergy() const {
     float U = 0;
 
     const Node* i = head;
