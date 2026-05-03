@@ -1,46 +1,51 @@
 #ifndef CHARGEENERGYCALCULATOR_ELECTROSTATICSYSTEM_H
-#definfloat CHARGEENERGYCALCULATOR_ELECTROSTATICSYSTEM_H
+#define CHARGEENERGYCALCULATOR_ELECTROSTATICSYSTEM_H
 
 struct Charge {
-    float chargeValue; // +/- number
-    float x, y, z; // space coordinates
+    float chargeValue;
+    float x, y, z;
 };
 
 class ElectrostaticSystem {
 private:
-    Charge* elems;
+    struct Node {
+        Charge elem;
+        Node* next;
+
+        Node(const Charge& c, Node* next = nullptr)
+            : elem(c), next(next) {}
+    };
+
+    Node* head;
     int length;
-    int capacity;
-    void resize();
+
+    void copyFrom(const ElectrostaticSystem& other);
+    void clearList();
 
 public:
-    // Dynamic vector functions
-    // Memory management
     ElectrostaticSystem();
-    ElectrostaticSystem(const ElectrostaticSystem& other);
-    ElectrostaticSystem& operator=(const ElectrostaticSystem& other);
+    ElectrostaticSystem(const ElectrostaticSystem& source);
+    ElectrostaticSystem& operator=(const ElectrostaticSystem& source);
     ~ElectrostaticSystem();
 
-    // Element management
-    void pushBack(const float& elem); // adds elem at the end
-    void popBack(); // removes last elem
-    void clear(); // removes all elements from vector; does not deconstruct it;
+    // Inserare / ștergere
+    void addCharge(const Charge& c);
+    bool removeChargeAt(float x, float y, float z);
+    void clear();
 
-    // Getters
-    int getLen() const; // returns length
-    bool isEmpty() const; // checks if there are no elements
-    float& getAtIndex(int index) const; // returns element at specified index
+    // Acces
+    int getLen() const;
+    bool isEmpty() const;
+    Charge& getAtIndex(int index) const;
 
-    // Iterators
-    float& getFront(); // gets first element
-    float& getBack(); // gets last element
+    // Căutare
+    Charge* findChargeAt(float x, float y, float z) const;
 
-    // Electrostatics functions
-    const float getPotentialAt(float x, float y, float z) const;
-    const float getFieldAt(float x, float y, float z) const;
-    const float getForceAt(float x, float y, float z) const;
-    const float getTotalEnergy() const;
+    // Electrostatică
+    float getPotentialAt(float x, float y, float z) const;
+    float getFieldAt(float x, float y, float z) const;
+    float getForceAt(float x, float y, float z) const;
+    float getTotalEnergy() const;
 };
 
-#includfloat "ElectrostaticSystem.tpp"
-#endif //CHARGEENERGYCALCULATOR_ELECTROSTATICSYSTEM_H
+#endif
