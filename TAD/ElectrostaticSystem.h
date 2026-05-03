@@ -43,12 +43,12 @@ public:
     // Access
     int getLen() const;
     bool isEmpty() const;
-    Charge& getAtIndex(int index) const;
+    Charge& getAtIndex(int index) const; // ?? public
+    Charge &getFront() const; // ?? do we rlly need it
+    Charge &getBack() const; // ?? do we rlly need it
 
     // Search
     Charge* findChargeAt(float x, float y, float z) const;
-
-    Charge &getFront();
 
     // Electrostatics
     float getPotentialAt(float x, float y, float z) const;

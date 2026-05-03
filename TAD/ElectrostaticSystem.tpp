@@ -66,7 +66,7 @@ inline ElectrostaticSystem::~ElectrostaticSystem() {
 }
 
 
-// Basic operations
+//~~~~~~~~~Basic operations~~~~~~~~~
 
 // add
 
@@ -113,17 +113,23 @@ inline void ElectrostaticSystem::clear() {
 }
 
 
-// Access
+// ~~~~~~~~~Access~~~~~~~~~
+
+// getLen
 
 inline int ElectrostaticSystem::getLen() const {
     return length;
 }
 
+// isEmpty
+
 inline bool ElectrostaticSystem::isEmpty() const {
     return length == 0;
 }
 
-inline Charge& ElectrostaticSystem::getAtIndex(int index) const {
+// getAtIndex
+
+inline Charge& ElectrostaticSystem::getAtIndex(const int index) const {
     if (index < 0 || index >= length)
         throw std::out_of_range("Index invalid");
 
@@ -134,7 +140,32 @@ inline Charge& ElectrostaticSystem::getAtIndex(int index) const {
     return crt->elem;
 }
 
-inline Charge* ElectrostaticSystem::findChargeAt(float x, float y, float z) const {
+// getFront
+
+inline Charge& ElectrostaticSystem::getFront() const {
+    if (head == nullptr)
+        throw std::out_of_range("List is empty");
+    return head->elem;
+}
+
+// getBack
+
+inline Charge& ElectrostaticSystem::getBack() const {
+    if (head == nullptr)
+        throw std::out_of_range("List is empty");
+
+    Node* crt = head;
+    while (crt->next != nullptr)
+        crt = crt->next;
+
+    return crt->elem;
+}
+
+// ~~~~~~~~~Search~~~~~~~~~
+
+// findChargeAt
+
+inline Charge* ElectrostaticSystem::findChargeAt(const float x, const float y, const float z) const {
     Node* crt = head;
     while (crt != nullptr) {
         if (crt->elem.x == x && crt->elem.y == y && crt->elem.z == z)
@@ -144,37 +175,19 @@ inline Charge* ElectrostaticSystem::findChargeAt(float x, float y, float z) cons
     return nullptr;
 }
 
-inline Charge& ElectrostaticSystem::getFront() {
-    if (head == nullptr)
-        throw std::out_of_range("Lista este goala");
-    return head->elem;
-}
 
-Charge& ElectrostaticSystem::getBack() {
-    if (head == nullptr)
-        throw std::out_of_range("Lista este goala");
+// =============Electrostatics functions=============
 
-    Node* crt = head;
-    while (crt->next != nullptr)
-        crt = crt->next;
-
-    return crt->elem;
-}
-
-// =======================
-// Funcții electrostatice
-// =======================
-
-float ElectrostaticSystem::getPotentialAt(float x, float y, float z) const {
-    const float k = 8.9875517923e9f;
+inline float ElectrostaticSystem::getPotentialAt(const float x, const float y, const float z) const {
     float V = 0;
 
-    Node* crt = head;
+    const Node* crt = head;
     while (crt != nullptr) {
-        float dx = x - crt->elem.x;
-        float dy = y - crt->elem.y;
-        float dz = z - crt->elem.z;
-        float r = std::sqrt(dx*dx + dy*dy + dz*dz);
+        constexpr float k = 8.9875517923e9f;
+        const float dx = x - crt->elem.x;
+        const float dy = y - crt->elem.y;
+        const float dz = z - crt->elem.z;
+        const float r = std::sqrt(dx*dx + dy*dy + dz*dz);
 
         if (r != 0)
             V += k * crt->elem.chargeValue / r;
@@ -185,16 +198,16 @@ float ElectrostaticSystem::getPotentialAt(float x, float y, float z) const {
     return V;
 }
 
-float ElectrostaticSystem::getFieldAt(float x, float y, float z) const {
-    const float k = 8.9875517923e9f;
+inline float ElectrostaticSystem::getFieldAt(const float x, const float y, const float z) const {
     float E = 0;
 
-    Node* crt = head;
+    const Node* crt = head;
     while (crt != nullptr) {
-        float dx = x - crt->elem.x;
-        float dy = y - crt->elem.y;
-        float dz = z - crt->elem.z;
-        float r = std::sqrt(dx*dx + dy*dy + dz*dz);
+        constexpr float k = 8.9875517923e9f;
+        const float dx = x - crt->elem.x;
+        const float dy = y - crt->elem.y;
+        const float dz = z - crt->elem.z;
+        const float r = std::sqrt(dx*dx + dy*dy + dz*dz);
 
         if (r != 0)
             E += k * std::abs(crt->elem.chargeValue) / (r*r);
@@ -205,25 +218,25 @@ float ElectrostaticSystem::getFieldAt(float x, float y, float z) const {
     return E;
 }
 
-float ElectrostaticSystem::getForceAt(float x, float y, float z) const {
+inline float ElectrostaticSystem::getForceAt(const float x, const float y, const float z) const {
     // Forța necesită o sarcină test q_test.
     // Dacă nu ai q_test, poți considera q_test = 1C.
-    float q_test = 1.0f;
+    constexpr float q_test = 1.0f;
     return q_test * getFieldAt(x, y, z);
 }
 
-float ElectrostaticSystem::getTotalEnergy() const {
-    const float k = 8.9875517923e9f;
+inline float ElectrostaticSystem::getTotalEnergy() const {
     float U = 0;
 
-    Node* i = head;
+    const Node* i = head;
     while (i != nullptr) {
         Node* j = i->next;
         while (j != nullptr) {
-            float dx = i->elem.x - j->elem.x;
-            float dy = i->elem.y - j->elem.y;
-            float dz = i->elem.z - j->elem.z;
-            float r = std::sqrt(dx*dx + dy*dy + dz*dz);
+            constexpr float k = 8.9875517923e9f;
+            const float dx = i->elem.x - j->elem.x;
+            const float dy = i->elem.y - j->elem.y;
+            const float dz = i->elem.z - j->elem.z;
+            const float r = std::sqrt(dx*dx + dy*dy + dz*dz);
 
             if (r != 0)
                 U += k * i->elem.chargeValue * j->elem.chargeValue / r;
